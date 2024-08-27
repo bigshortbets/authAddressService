@@ -9,7 +9,7 @@ import { ethers } from 'ethers';
 @Injectable()
 export class EthAddressValidationMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
-    const ethAddress = req.body.ethAddress || req.params.ethAddress;
+    const ethAddress = req.body.userAddress || req.params.ethAddress;
 
     if (!ethAddress || !ethers.isAddress(ethAddress)) {
       throw new BadRequestException('Invalid Ethereum address');

@@ -15,6 +15,16 @@ export class UserService {
 
   async convertAndSave(ethAddress: string): Promise<UserResDto | {}> {
     try {
+      const existingUser = await this.prisma.addressRecord.findUnique({
+        where: {
+          ethAddress: ethAddress,
+        },
+      });
+
+      if (existingUser) {
+        return existingUser;
+      }
+
       const ss58Address = convertEVMtoSubstrateAddress(ethAddress);
 
       const user = await this.prisma.addressRecord.create({
