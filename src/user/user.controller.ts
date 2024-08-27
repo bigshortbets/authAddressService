@@ -1,6 +1,12 @@
 import { Controller, Post, Get, Param, Body } from '@nestjs/common';
 import { UserService } from './user.service';
-import { ApiResponse, ApiTags, ApiParam, ApiBody } from '@nestjs/swagger';
+import {
+  ApiResponse,
+  ApiTags,
+  ApiParam,
+  ApiBody,
+  ApiSecurity,
+} from '@nestjs/swagger';
 import { LoginDto } from './dto/user.dto';
 import { UserResDto } from './dto/userRes.dto';
 
@@ -20,7 +26,8 @@ export class UserController {
     description: 'User has been successfully logged in and saved.',
     type: UserResDto,
   })
-  async login(@Body('ethAddress') body: LoginDto): Promise<UserResDto | {}> {
+  @ApiSecurity('x-api-key')
+  async login(@Body() body: LoginDto): Promise<UserResDto | {}> {
     return this.userService.convertAndSave(body.userAddress);
   }
 

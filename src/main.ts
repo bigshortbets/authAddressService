@@ -42,7 +42,14 @@ async function bootstrap() {
     .setVersion('1.0.0')
     .addTag('Open API')
     .setVersion('1.0')
-    .addCookieAuth('Authorization')
+    .addApiKey(
+      {
+        type: 'apiKey',
+        name: 'x-api-key',
+        in: 'header',
+      },
+      'x-api-key',
+    )
     .build();
 
   const swaggerPath = '/api/docs';
