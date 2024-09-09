@@ -28,13 +28,11 @@ async function bootstrap() {
 
   app.enableVersioning({ type: VersioningType.URI });
 
-  // app.enableCors({
-  //   credentials: true,
-  //   methods:
-  //     process.env.CORS_METHODS || 'GET, PUT, POST, PATCH, DELETE, OPTIONS',
-  //   origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : [],
-  //   allowedHeaders: process.env.CORS_HEADERS || 'Content-Type, Accept',
-  // });
+  app.enableCors({
+    allowedHeaders: '*',
+    origin: '*',
+    credentials: true,
+  });
 
   const config = new DocumentBuilder()
     .setTitle('Auth Address Service')
