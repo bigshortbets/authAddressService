@@ -29,11 +29,11 @@ async function bootstrap() {
   app.enableVersioning({ type: VersioningType.URI });
 
   app.enableCors({
-    allowedHeaders: '*',
     origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: '*',
     credentials: true,
   });
-
   const config = new DocumentBuilder()
     .setTitle('Auth Address Service')
     .setDescription('Documentation Backend API')
