@@ -32,7 +32,7 @@ async function bootstrap() {
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: '*',
-    credentials: true,
+    credentials: false,
   });
   const config = new DocumentBuilder()
     .setTitle('Auth Address Service')
