@@ -13,30 +13,28 @@ export class UserService {
     this.logger.verbose(`Creating UserService`, this.SERVICE);
   }
 
-  async convertAndSave(ethAddress: string): Promise<UserResDto | {}> {
+  async convertAndSave(ethAddress: string): Promise<UserResDto> {
     try {
-      const existingUser = await this.prisma.addressRecord.findUnique({
-        where: {
-          ethAddress: ethAddress,
-        },
-      });
-
-      if (existingUser) {
-        return existingUser;
-      }
-
-      const ss58Address = convertEVMtoSubstrateAddress(ethAddress);
-
-      const user = await this.prisma.addressRecord.create({
-        data: {
+      const user = await this.prisma.addressRecord.upsert({
+        where: { ethAddress },
+        update: {},
+        create: {
           ethAddress,
-          ss58Address,
+          ss58Address: convertEVMtoSubstrateAddress(ethAddress),
         },
       });
 
       return user;
     } catch (error) {
-      throw new Error(`Failed to create record: ${error.message}`);
+      throw new Error(`Failed to create or retrieve record: ${error.message}`);
+    }
+  }
+
+  async getAllRecords(): Promise<UserResDto[]> {
+    try {
+      return await this.prisma.addressRecord.findMany();
+    } catch (error) {
+      throw new Error(`Failed to retrieve all records: ${error.message}`);
     }
   }
 
@@ -46,11 +44,7 @@ export class UserService {
         where: { ethAddress },
       });
 
-      if (!user) {
-        return {};
-      }
-
-      return user;
+      return user || {};
     } catch (error) {
       throw new Error(
         `Failed to retrieve record by Ethereum address: ${error.message}`,
@@ -66,11 +60,7 @@ export class UserService {
         where: { ss58Address },
       });
 
-      if (!user) {
-        return {};
-      }
-
-      return user;
+      return user || {};
     } catch (error) {
       throw new Error(
         `Failed to retrieve record by Substrate address: ${error.message}`,

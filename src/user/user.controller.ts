@@ -31,6 +31,16 @@ export class UserController {
     return this.userService.convertAndSave(body.userAddress);
   }
 
+  @Get('all')
+  @ApiResponse({
+    status: 200,
+    description: 'User record retrieved successfully.',
+    type: Array<UserResDto>,
+  })
+  async getAllRecords(): Promise<UserResDto[]> {
+    return this.userService.getAllRecords();
+  }
+
   @Get('eth/:ethAddress')
   @ApiParam({
     name: 'ethAddress',
